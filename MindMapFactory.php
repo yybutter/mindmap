@@ -17,6 +17,52 @@ require "./Bean/Root.php";
 
 function queryMindMapByNodeId($nodeId) {
 
+    // 建立数据库链接
+    $mysqli = new mysqli("localhost", "root", "", "mindmap");
+    // 根据nodeId查找对应的mindId作为根节点的mindId以及userId;
+    $stmt = $mysqli->prepare("SELECT mindId, userId FROM MindTable WHERE nodeId = ?");
+    $stmt->bind_param("s", $nodeId);
+    $stmt->execute();
+    $stmt->bind_result($rootMindId, $userId);
+    $haveResult = $stmt->fetch();
+    $stmt->close();
+    // 未查询到用户Id
+    if (!$haveResult) {
+        $mysqli->close();
+        return "nodeId not exists";
+    }
+    // 根据用户ID查询该用户所有的结点
+    $stmt = $mysqli->prepare("SELECT mindID, mindIDAlias, parentId, userID, nodeId, mindTitle, createdDates, modifiedDates, dimendionsX, dimendionsY, autosave, caption, style, weight, decoration, size, textColor, offsetX, offsetY, foldChildren, branchColor FROM MindTable WHERE userId = ?");
+    $stmt->bind_param("s", $userId);
+    $stmt->execute();
+    $stmt->bind_result($m_mindID, $m_mindIDAlias, $m_parentId, $m_userID, $m_nodeId, $m_mindTitle, $m_createdDates, $m_modifiedDates, $m_dimendionsX, $m_dimendionsY, $m_autosave, $m_caption, $m_style, $m_weight, $m_decoration, $m_size, $m_textColor, $m_offsetX, $m_offsetY, $m_foldChildren, $m_branchColor);
+    // 保存查询结果
+    $resultArray = array();
+    // 保存parent指向children的数据结构
+    $parentPointToChildrenArray = array();
+    while($stmt->fetch()) {
+        $resultArray[$m_mindID] = array($m_mindIDAlias, $m_parentId, $m_userID, $m_nodeId, $m_mindTitle, $m_createdDates, $m_modifiedDates, $m_dimendionsX, $m_dimendionsY, $m_autosave, $m_caption, $m_style, $m_weight, $m_decoration, $m_size, $m_textColor, $m_offsetX, $m_offsetY, $m_foldChildren, $m_branchColor);
+        // 根据parentId获得childrenId数组
+        $childrenIdArray = $parentPointToChildrenArray[$m_parentId];
+        if ($childrenIdArray == null) {
+            $childrenIdArray = array();
+        }
+        array_push($childrenIdArray, $m_mindID);
+        $parentPointToChildrenArray[$m_parentId] = $childrenIdArray;
+    }
+    $stmt->close();
+    $mysqli->close();
+
+    // DEBUG
+    print_r($resultArray);
+    print_r($parentPointToChildrenArray);
+
+    // 根据$resultArray和$parentPointToChildrenArray构造MindMap
+    // 首先构造MindMap
+    $rootNodeArray = $resultArray[$rootMindId];
+    $mindMap = new MindMap();
+    // TODO
+
     $mindMap = new MindMap();
     $mindMap->id = "95a5406f-23d0-4591-8848-99cc09b75348";
     $mindMap->title = "E-learning";
