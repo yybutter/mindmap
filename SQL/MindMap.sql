@@ -1,14 +1,15 @@
 CREATE TABLE IF NOT EXISTS `MindTable` (
   `mindID` int(11) NOT NULL AUTO_INCREMENT,
+  `mindIDAlias` varchar(100) NOT NULL,
+  `parentId` int(11) NOT NULL,
   `userID` int(11) NOT NULL,
+  `nodeId` int(11) NOT NULL,
   `mindTitle` varchar(50) NOT NULL,
-  `createdDates` varchar(50) NOT NULL,
-  `modifiedDates` varchar(50) NOT NULL,
+  `createdDates` datetime NOT NULL,
+  `modifiedDates` datetime NOT NULL,
   `dimendionsX` int(11) NOT NULL,
   `dimendionsY` int(11) NOT NULL,
   `autosave` varchar(50) NOT NULL,
-  `nodeId` int(11) NOT NULL,
-  `parentId` int(11) NOT NULL,
   `caption` varchar(50) NOT NULL,
   `style` varchar(50) NOT NULL DEFAULT 'normal',
   `weight` varchar(50) NOT NULL DEFAULT 'normal',
@@ -21,4 +22,4 @@ CREATE TABLE IF NOT EXISTS `MindTable` (
   `branchColor` varchar(50) NOT NULL DEFAULT '#000000',
   PRIMARY KEY (`mindID`),
   UNIQUE KEY `mindID` (`mindID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=600 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=600;
