@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS `MindTable` (
   `offsetY` int(11) NOT NULL,
   `foldChildren` varchar(50) NOT NULL DEFAULT 'false',
   `branchColor` varchar(50) NOT NULL DEFAULT '#000000',
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`mindID`),
   UNIQUE KEY `mindID` (`mindID`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=600;
