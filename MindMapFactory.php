@@ -61,7 +61,46 @@ function queryMindMapByNodeId($nodeId) {
     // 首先构造MindMap
     $rootNodeArray = $resultArray[$rootMindId];
     $mindMap = new MindMap();
-    // TODO
+    $mindMap->id = "95a5406f-23d0-4591-8848-99cc09b75348";
+    $mindMap->title = $rootNodeArray[4];
+
+    $rootNode = new Node();
+    $rootNode->id = $rootNodeArray[0];
+    $rootNode->parentId = null;
+    $text = new Text();
+    $text->caption = $rootNodeArray[10];
+    $font = new Font();
+    $font->style = $rootNodeArray[11];
+    $font->weight = $rootNodeArray[12];
+    $font->decoration = $rootNodeArray[13];
+    $font->size = $rootNodeArray[14];
+    $font->color = $rootNodeArray[15];
+    $text->font = $font;
+    $rootNode->text = $text;
+    $offset = new Offset();
+    $offset->x = $rootNodeArray[16];
+    $offset->y = $rootNodeArray[17];
+    $rootNode->offset = $offset;
+    if ($rootNodeArray[18])
+        $rootNode->foldChildren = true;
+    else
+        $rootNode->foldChildren = false;
+    $rootNode->branchColor = $rootNodeArray[19];
+
+    $root = new Root();
+    $root->root = $rootNode;
+    $mindMap->mindmap = $root;
+    $dates = new Dates();
+    $dates->created = $rootNodeArray[5];
+    $dates->modified = $rootNodeArray[6];
+    $mindMap->dates = $dates;
+    $dimensions = new Dimensions();
+    $dimensions->x = $rootNodeArray[7];
+    $dimensions->y = $rootNodeArray[8];
+    $mindMap->dimensions = $dimensions;
+    $mindMap->autosave = false;
+
+    return $mindMap;
 
     $mindMap = new MindMap();
     $mindMap->id = "95a5406f-23d0-4591-8848-99cc09b75348";
